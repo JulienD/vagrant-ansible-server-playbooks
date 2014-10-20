@@ -4,7 +4,7 @@ This is a simple recipe for *vagrant* that sets up an Ubuntu virtual machine inc
 
 This project aims to make spinning up a simple development environment and avoid loosing time creating virtual machines.
 
-All the provisionning is done with `Ansible`.
+All the provisioning is done with `Ansible`.
 
 ## LAMP environnement
 
@@ -19,8 +19,8 @@ It will install the following on an Ubuntu 14.04 linux VM:
 
 The repository hosts several development environnements you can access in the other branches. Each of them are designed to answer to specific needs.
 
-- ubuntu-14.04-lamp-dev
-- ubuntu-14.04-nodejs-dev
+- [ubuntu-14.04-lamp-dev](https://github.com/JulienD/vagrant-ansible-server-playbooks/tree/ubuntu-14.04-lamp-dev)
+- [ubuntu-14.04-nodejs-dev](https://github.com/JulienD/vagrant-ansible-server-playbooks/tree/ubuntu-14.04-nodejs-dev)
 
 ## Requirements
 
@@ -42,7 +42,7 @@ Go into the directory and run:
 
 This should download, run and provision the virtual machine.
 
-If something goes wrong, have a look at `provisionning/playbook.yml`. You can re-provision the VM using at any moment when you change the configuration:
+If something goes wrong, have a look at `provisioning/playbook.yml`. You can re-provision the VM using at any moment when you change the configuration:
 
     vagrant provision
 
@@ -52,7 +52,7 @@ When you're done playing with the VM, you can delete it:
 
 ## Customize the installation
 
-Ansible tags are used to manage and group sets of actions. This mean you can choose to add specific actions in addition to the default provisionning your Vagrantfile.
+Ansible tags are used to manage and group sets of actions. This mean you can choose to add specific actions in addition to the default provisioning your Vagrantfile.
 
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = "provisioning/playbook.yml"
@@ -61,7 +61,7 @@ Ansible tags are used to manage and group sets of actions. This mean you can cho
 
 In the above example, in addition to the common package, all the action in the recipe tagged with the drush tag will be executed.
 
-For more details have a look at the file `provisionning/playbook.yml` and look for the `tags` property.
+For more details have a look at the file `provisioning/playbook.yml` and look for the `tags` property.
 
 ### Available tags
 
