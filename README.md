@@ -1,6 +1,6 @@
-# Vagrant Ansible LAMP env.
+# Vagrant Ansible Node.js env.
 
-This is a simple recipe for *vagrant* that sets up an Ubuntu virtual machine including common daemons and tools required for PHP web development.
+This is a simple recipe for *vagrant* that sets up an Ubuntu virtual machine including common daemons and tools required for Node.js development.
 
 This project aims to make spinning up a simple development environment and avoid loosing time creating virtual machines.
 
@@ -11,10 +11,8 @@ All the provisionning is done with `Ansible`.
 This project is designed to install all needed for web developpement on a LAMP architecture.
 It will install the following on an Ubuntu 14.04 linux VM:
 
-- Apache 2.4.x
-- PHP 5.5.x
+- Node.js
 - MySQL 5.5.x
-- Composer
 - Git
 
 ## Other environnements
@@ -36,7 +34,7 @@ Preferably in their latest versions from the web sites.
 
 Clone this repository to a local directory and change the name of it:
 
-    git clone https://github.com/JulienD/vagrant-ansible-server-playbooks.git lamp-dev-env
+    git clone https://github.com/JulienD/vagrant-ansible-server-playbooks.git nodejs-dev-env
 
 Go into the directory and run:
 
@@ -58,7 +56,7 @@ Ansible tags are used to manage and group sets of actions. This mean you can cho
 
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = "provisioning/playbook.yml"
-      ansible.tags="common,drush"
+      ansible.tags="common"
     end
 
 In the above example, in addition to the common package, all the action in the recipe tagged with the drush tag will be executed.
@@ -68,19 +66,9 @@ For more details have a look at the file `provisionning/playbook.yml` and look f
 ### Available tags
 
 - common
-- drush
 
 ## Why not respecting Ansible best practices
 
 For months I've been using the classical Ansible structure management by having a separated dir for each components. This structure work really fine and is useful for sys-admin when they have to manage and maintain a lot of component, but for a local dev machine it's too much (this is my point of view).
 
 I decided to rewrite all my development machines recipes in a flattern file way where everything is accessible at the first glance and doesn't require to navigate in dozens of sub-folders and file. KISS
-
-## Todo
-
-Here is a list of things I have to do to finish this env.
-- Automate Apache Vhost file (by default)
-- Add and configure XDebug (by default)
-- Configuring Apc for PHP 5.5 (by default)
-- Memcache (in option)
-- SolR (in option)

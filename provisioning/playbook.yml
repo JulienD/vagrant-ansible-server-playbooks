@@ -1,9 +1,8 @@
 ##
-# Ansible playbook for setting up a LAMP development server on Ubuntu 12.04.
+# Ansible playbook for setting up a Node.Js development server on Ubuntu 14.04.
 #
 ---
 - hosts: all
-  #user: root
   user: vagrant
   sudo: yes
 
@@ -23,23 +22,14 @@
       apt: upgrade=yes update_cache=yes
       tags: common
 
-    - name: Common | Ensure a locale exists
-      locale_gen: name= {{ locale }} state=present
+    - name: Common | Install the locales package
+      apt: pkg=locales state=present
 
-    ##
-    # Apt package installation of common software.
-    #
-    - name: Common | Install misc utils.
-      action: apt pkg={{ item }} state=installed force=yes
-      tags: common
-      with_items:
-        - htop
-        - curl
-        - python-software-properties
-        - python-pycurl
-        - software-properties-common
-        - unzip
-        - vim
+    - name: Common | Ensure the locale exists
+      command: /usr/sbin/locale-gen {{ locale }}
+
+    - name: Common | Set the locale
+      command: /usr/sbin/update-locale LANG={{ locale }} --reset
 
 
     ##
@@ -52,80 +42,6 @@
         - python-software-properties
         - python-pycurl
         - python-mysqldb
-
-
-    ##
-    # GIT Setup.
-    #
-    - name: Git | Install git base packages
-      apt: pkg=git-core state=installed force=yes
-      tags: common
-
-
-    ##
-    # Apache2 setup.
-    #
-    - name: Apache | Install required packages.
-      action: apt pkg=apache2 state=latest force=yes
-      tags: common
-
-    - name: Apache | Enable some required modules
-      action: command a2enmod rewrite vhost_alias
-      tags: common
-
-    - name: Apache | Configuration file for our site
-      action: template src=templates/apache2-default-virtualhost.j2 dest=/etc/apache2/sites-available/default
-      tags: common
-
-    - name: Apache | Enable module | Enable $module
-      command: a2enmod {{ item }} creates=/etc/apache2/mods-enabled/$apache_modules.load
-      tags: common
-      with_items:
-        - rewrite
-        - vhost_alias
-        - headers
-        - expires
-        - filter
-
-
-    ##
-    # PHP Setup.
-    #
-    - name: PHP | Install required packages.
-      action: apt pkg={{ item }} state=installed force=yes
-      tags: common
-      with_items:
-        - php5
-        - php-apc
-        - php5-cli
-        - php5-common
-        - php5-curl
-        - php5-dev
-        - php5-gd
-        - php5-mysql
-        - php5-xdebug
-        - php5-xmlrpc
-        - php5-gd
-        - libapache2-mod-php5
-        - libpcre3-dev
-
-    - name: PHP | Configuration file, php.ini
-      action: template src=templates/php5-apache2-php-ini.j2 dest=/etc/php5/apache2/php.ini
-      tags: common
-
-    #- name: APC | Cache configuration file, apc.ini
-    #  action: template src=templates/etc-php5-conf-d-apc-ini.j2 dest=/etc/php5/conf.d/apc.ini
-    #  tags: common
-
-
-    ##
-    # Composer
-    #
-    - name: Php | Install composer
-      tags: common
-      shell:
-        curl -sS https://getcomposer.org/installer | /usr/bin/php && /bin/mv -f /home/vagrant/composer.phar /usr/local/bin/composer
-        creates=/usr/local/bin/composer
 
 
     ##
@@ -163,114 +79,27 @@
       mysql_db: db=test state=absent login_user=root login_password={{ mysql_root_password }}
       tags: common
 
-    ##
-    # Drush.
-    #
-    - name: Drush | Clone Drush from GitHub.
-      command: /usr/bin/git clone https://github.com/drush-ops/drush.git  /usr/local/share/drush
-      tags: drush
-
-    - name: Drush | Install Drush dependencies with Composer.
-      shell: >
-        /usr/local/bin/composer install --prefer-source --no-interaction
-        chdir=/usr/local/share/drush
-        creates=/usr/local/share/drush/vendor/autoload.php
-      tags: drush
-
-    - name: Drush | Create drush symlink.
-      file: src=/usr/local/share/drush/drush dest=/usr/local/bin/drush state=link
-      tags: drush
-
 
     ##
-    # Node.js installation (latest stable instead of Ubuntu's out-of-date one)
+    # Node.js installation
     #
     - name: Node.js | Package prerequisites for node.js
       action: apt pkg=python-software-properties state=installed
-      tags: nodejs
+      tags: common
 
     - name: Node.js | Add the node.js PPA
       action: command add-apt-repository -y ppa:chris-lea/node.js creates=/etc/apt/sources.list.d/chris-lea-node_js-precise.list
-      tags: nodejs
+      tags: common
 
     - name: Node.js | Update the apt cache for the new repository
       action: apt update-cache=yes
-      tags: nodejs
+      tags: common
 
     - name: Node.js | Install nodejs and npm
-      action: apt pkg={{ item }} state=installed
-      tags: nodejs
-      with_items:
-        - nodejs
-        - npm
-
-
-    ##
-    # Restart services
-    #
-    - name: Restart Apache
-      action: service name=apache2 state=restarted
+      action: apt pkg=nodejs state=installed
       tags: common
+
 
     - name: Restart MySQL
       action: service name=mysql state=restarted
       tags: common
-
-
-
-#------------------------------------------------------
-
-#
-# # Install the default templates
-# - name: Php | Set php.ini CLI template
-#   template:
-#     src=php_cli.ini.j2
-#     dest=/etc/php5/cli/php.ini
-#     owner=root group=root mode=0644
-#
-# # APC (with php extensions directory for >= 12.10)
-# - name: Php | Set APC config (Ubuntu >= 12.10)
-#   template:
-#     src=apc.ini.j2
-#     dest=/etc/php5/mods-available/apc.ini
-#     owner=root group=root mode=0644
-#   when: ansible_lsb.release != "12.04"
-#
-# # APC (with php extensions directory for < 12.10)
-# - name: Php | Set APC config (Ubuntu == 12.04)
-#   template:
-#     src=apc.ini.j2
-#     dest=/etc/php5/conf.d/apc.ini
-#     owner=root group=root mode=0644
-#   when: ansible_lsb.release == "12.04"
-#
-# # DEV packages and configs
-# - name: Install PHP development packages
-#   apt: pkg={{ item }} state=installed
-#   with_items:
-#   - php-pear
-#
-#
-# # PEAR Packages
-# # ####################
-# - name: Php | Update pear packages
-#   command: pear upgrade
-#
-# - name: Php | Set pear auto-discover
-#   command: pear config-set auto_discover 1
-#
-# - name: Php | Pear install the PHP QA Toolchain
-#   command: pear install pear.phpqatools.org/phpqatools creates=/usr/bin/phpunit
-#   # this fails often (dns problems, pear problems, etc. So just ignore the errors and continue.)
-#   ignore_errors: True
-#
-#
-# # PECL Packages
-# # #####################
-#
-# # XDebug
-# - name: Php | Fetch PHP extension dir
-#   shell: "php -i | grep -i '^extension_dir' | awk '{print $3}'"
-#   register: php_extension_dir
-#
-# - include: pecl.yml package=xdebug version=stable stdin=
