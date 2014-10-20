@@ -1,4 +1,4 @@
-# vagrant-ansible-LAMP-env
+# Vagrant Ansible LAMP env.
 
 This is a simple recipe for *vagrant* that sets up an Ubuntu virtual machine including common daemons and tools required for PHP web development.
 
@@ -19,12 +19,10 @@ It will install the following on an Ubuntu 14.04 linux VM:
 
 ## Other environnements
 
-The repository hosts several developpment environnements you can access in the other branches. Each of them are designed to answer to specific needs.
+The repository hosts several development environnements you can access in the other branches. Each of them are designed to answer to specific needs.
 
 - ubuntu-14.04-lamp-dev
-- ubuntu-14.04-pyhton-dev
 - ubuntu-14.04-nodejs-dev
-- ubuntu-14.04-ruby-dev
 
 ## Requirements
 
@@ -38,9 +36,9 @@ Preferably in their latest versions from the web sites.
 
 Clone this repository to a local directory and change the name of it:
 
-    git clone  lamp-dev-env
+    git clone https://github.com/JulienD/vagrant-ansible-server-playbooks.git lamp-dev-env
 
-Go into the direcotry and run:
+Go into the directory and run:
 
     vagrant up
 
@@ -76,7 +74,7 @@ For more details have a look at the file `provisionning/playbook.yml` and look f
 
 For months I've been using the classical Ansible structure management by having a separated dir for each components. This structure work really fine and is useful for sys-admin when they have to manage and maintain a lot of component, but for a local dev machine it's too much (this is my point of view).
 
-I decided to rewrite all my development machines recipes in a flattern file way where everything is accessible at the first glance and doesn't require to naviguate in dozens of sub-folders and file. KISS
+I decided to rewrite all my development machines recipes in a flattern file way where everything is accessible at the first glance and doesn't require to navigate in dozens of sub-folders and file. KISS
 
 ## Todo
 
