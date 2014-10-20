@@ -23,8 +23,14 @@
       apt: upgrade=yes update_cache=yes
       tags: common
 
-    - name: Common | Ensure a locale exists
-      locale_gen: name= {{ locale }} state=present
+    - name: Common | Install the locales package
+      apt: pkg=locales state=present
+
+    - name: Common | Ensure the locale exists
+      command: /usr/sbin/locale-gen {{ locale }}
+
+    - name: Common | Set the locale
+    command: /usr/sbin/update-locale LANG={{ locale }} --reset
 
     ##
     # Apt package installation of common software.
@@ -113,10 +119,6 @@
       action: template src=templates/php5-apache2-php-ini.j2 dest=/etc/php5/apache2/php.ini
       tags: common
 
-    #- name: APC | Cache configuration file, apc.ini
-    #  action: template src=templates/etc-php5-conf-d-apc-ini.j2 dest=/etc/php5/conf.d/apc.ini
-    #  tags: common
-
 
     ##
     # Composer
@@ -163,6 +165,7 @@
       mysql_db: db=test state=absent login_user=root login_password={{ mysql_root_password }}
       tags: common
 
+
     ##
     # Drush.
     #
@@ -183,29 +186,6 @@
 
 
     ##
-    # Node.js installation (latest stable instead of Ubuntu's out-of-date one)
-    #
-    - name: Node.js | Package prerequisites for node.js
-      action: apt pkg=python-software-properties state=installed
-      tags: nodejs
-
-    - name: Node.js | Add the node.js PPA
-      action: command add-apt-repository -y ppa:chris-lea/node.js creates=/etc/apt/sources.list.d/chris-lea-node_js-precise.list
-      tags: nodejs
-
-    - name: Node.js | Update the apt cache for the new repository
-      action: apt update-cache=yes
-      tags: nodejs
-
-    - name: Node.js | Install nodejs and npm
-      action: apt pkg={{ item }} state=installed
-      tags: nodejs
-      with_items:
-        - nodejs
-        - npm
-
-
-    ##
     # Restart services
     #
     - name: Restart Apache
@@ -215,62 +195,3 @@
     - name: Restart MySQL
       action: service name=mysql state=restarted
       tags: common
-
-
-
-#------------------------------------------------------
-
-#
-# # Install the default templates
-# - name: Php | Set php.ini CLI template
-#   template:
-#     src=php_cli.ini.j2
-#     dest=/etc/php5/cli/php.ini
-#     owner=root group=root mode=0644
-#
-# # APC (with php extensions directory for >= 12.10)
-# - name: Php | Set APC config (Ubuntu >= 12.10)
-#   template:
-#     src=apc.ini.j2
-#     dest=/etc/php5/mods-available/apc.ini
-#     owner=root group=root mode=0644
-#   when: ansible_lsb.release != "12.04"
-#
-# # APC (with php extensions directory for < 12.10)
-# - name: Php | Set APC config (Ubuntu == 12.04)
-#   template:
-#     src=apc.ini.j2
-#     dest=/etc/php5/conf.d/apc.ini
-#     owner=root group=root mode=0644
-#   when: ansible_lsb.release == "12.04"
-#
-# # DEV packages and configs
-# - name: Install PHP development packages
-#   apt: pkg={{ item }} state=installed
-#   with_items:
-#   - php-pear
-#
-#
-# # PEAR Packages
-# # ####################
-# - name: Php | Update pear packages
-#   command: pear upgrade
-#
-# - name: Php | Set pear auto-discover
-#   command: pear config-set auto_discover 1
-#
-# - name: Php | Pear install the PHP QA Toolchain
-#   command: pear install pear.phpqatools.org/phpqatools creates=/usr/bin/phpunit
-#   # this fails often (dns problems, pear problems, etc. So just ignore the errors and continue.)
-#   ignore_errors: True
-#
-#
-# # PECL Packages
-# # #####################
-#
-# # XDebug
-# - name: Php | Fetch PHP extension dir
-#   shell: "php -i | grep -i '^extension_dir' | awk '{print $3}'"
-#   register: php_extension_dir
-#
-# - include: pecl.yml package=xdebug version=stable stdin=
