@@ -1,0 +1,19 @@
+##
+# Ansible provided setup.
+##
+<VirtualHost *:80>
+  ServerName {{ item.vhost }}
+	ServerAdmin {{ apache_server_admin }}
+	ServerAlias {{ apache_server_alias }}
+
+  DocumentRoot {{ apache_root}}/{{ item.docroot }}
+  <Directory {{ apache_root}}/{{ item.docroot }}>
+    Options -Indexes FollowSymLinks MultiViews
+    AllowOverride All
+    Order allow,deny
+    allow from all
+  </Directory>
+
+  CustomLog ${APACHE_LOG_DIR}/access_{{ item.vhost }}.log combined
+  ErrorLog ${APACHE_LOG_DIR}/error_{{ item.vhost }}.log
+</VirtualHost>
