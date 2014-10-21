@@ -33,6 +33,36 @@
 
 
     ##
+    # Installs NTP.
+    #
+    - name: Common | Install NTP
+      apt: pkg={{ item }} state=present
+      with_items:
+        - ntp
+        - ntpdate
+      tags: common
+
+    - name: write ntp.conf
+      copy: src=templates/ntp.conf dest=/etc/ntp.conf owner=root group=root mode=0644
+      tags: common
+
+
+    ##
+    # Apt package installation of common software.
+    #
+    - name: Common | Install misc utils.
+      action: apt pkg={{ item }} state=installed force=yes
+      tags: common
+      with_items:
+        - htop
+        - curl
+        - python-software-properties
+        - python-pycurl
+        - software-properties-common
+        - unzip
+        - vim
+
+    ##
     # Python setup
     #
     - name: Common | Install misc utils.
@@ -42,6 +72,14 @@
         - python-software-properties
         - python-pycurl
         - python-mysqldb
+
+
+    ##
+    # GIT Setup.
+    #
+    - name: Git | Install git base packages
+      apt: pkg=git-core state=installed force=yes
+      tags: common
 
 
     ##
