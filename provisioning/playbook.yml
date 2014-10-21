@@ -68,66 +68,6 @@
       tags: common
 
 
-    ##
-    # Apache2 setup.
-    #
-    - name: Apache | Install required packages.
-      action: apt pkg=apache2 state=latest force=yes
-      tags: common
-
-    - name: Apache | Enable some required modules
-      action: command a2enmod rewrite vhost_alias
-      tags: common
-
-    - name: Apache | Configuration file for our site
-      action: template src=templates/apache2-default-virtualhost.j2 dest=/etc/apache2/sites-available/default
-      tags: common
-
-    - name: Apache | Enable module | Enable $module
-      command: a2enmod {{ item }} creates=/etc/apache2/mods-enabled/$apache_modules.load
-      tags: common
-      with_items:
-        - rewrite
-        - vhost_alias
-        - headers
-        - expires
-        - filter
-
-
-    ##
-    # PHP Setup.
-    #
-    - name: PHP | Install required packages.
-      action: apt pkg={{ item }} state=installed force=yes
-      tags: common
-      with_items:
-        - php5
-        - php-apc
-        - php5-cli
-        - php5-common
-        - php5-curl
-        - php5-dev
-        - php5-gd
-        - php5-mysql
-        - php5-xdebug
-        - php5-xmlrpc
-        - php5-gd
-        - libapache2-mod-php5
-        - libpcre3-dev
-
-    - name: PHP | Configuration file, php.ini
-      action: template src=templates/php5-apache2-php-ini.j2 dest=/etc/php5/apache2/php.ini
-      tags: common
-
-
-    ##
-    # Composer
-    #
-    - name: Php | Install composer
-      tags: common
-      shell:
-        curl -sS https://getcomposer.org/installer | /usr/bin/php && /bin/mv -f /home/vagrant/composer.phar /usr/local/bin/composer
-        creates=/usr/local/bin/composer
 
 
     ##
@@ -167,31 +107,8 @@
 
 
     ##
-    # Drush.
-    #
-    - name: Drush | Clone Drush from GitHub.
-      command: /usr/bin/git clone https://github.com/drush-ops/drush.git  /usr/local/share/drush
-      tags: drush
-
-    - name: Drush | Install Drush dependencies with Composer.
-      shell: >
-        /usr/local/bin/composer install --prefer-source --no-interaction
-        chdir=/usr/local/share/drush
-        creates=/usr/local/share/drush/vendor/autoload.php
-      tags: drush
-
-    - name: Drush | Create drush symlink.
-      file: src=/usr/local/share/drush/drush dest=/usr/local/bin/drush state=link
-      tags: drush
-
-
-    ##
     # Restart services
     #
-    - name: Restart Apache
-      action: service name=apache2 state=restarted
-      tags: common
-
     - name: Restart MySQL
       action: service name=mysql state=restarted
       tags: common
