@@ -79,8 +79,5 @@ I decided to rewrite all my development machines recipes in a flattern file way 
 ## Todo
 
 Here is a list of things I have to do to finish this env.
-- Automate Apache Vhost file (by default)
 - Add and configure XDebug (by default)
-- Configuring Apc for PHP 5.5 (by default)
-- Memcache (in option)
 - SolR (in option)
