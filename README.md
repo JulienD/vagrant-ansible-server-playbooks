@@ -69,6 +69,8 @@ For more details have a look at the file `provisioning/playbook.yml` and look fo
 
 - common
 - drush
+- apache_vhost
+- mysql_db
 
 ## Why not respecting Ansible best practices
 

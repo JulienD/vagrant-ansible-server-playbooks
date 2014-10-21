@@ -113,21 +113,21 @@
 
     - name: Apache | Create Apache vhosts document root
       file: path={{apache_root }}/{{ item.docroot }} state=directory force=no
-      with_items: apache_vhosts
-      when: apache_vhosts
-      tags: vhost
+      with_items: apache_vhost
+      when: apache_vhost
+      tags: apache_vhost
 
     - name: Apache | Create Apache vhosts
       template: src=templates/apache2-virtualhost.j2 dest=/etc/apache2/sites-available/{{ item.vhost }}.conf owner=root mode=0744
-      with_items: apache_vhosts
-      when: apache_vhosts
-      tags: vhost
+      with_items: apache_vhost
+      when: apache_vhost
+      tags: apache_vhost
 
     - name: Apache | Enable Apache vhosts
       command: /usr/sbin/a2ensite {{ item.vhost }}.conf
-      with_items: apache_vhosts
-      when: apache_vhosts
-      tags: vhost
+      with_items: apache_vhost
+      when: apache_vhost
+      tags: apache_vhost
 
 
     ##
@@ -201,8 +201,8 @@
 
     - name: MySQL | Add MySQL databases
       mysql_db: name={{item.name}} state=present
-      with_items: mysql_dbs
-      when: mysql_dbs
+      with_items: mysql_db
+      when: mysql_db
       tags: mysql_db
 
     ##
