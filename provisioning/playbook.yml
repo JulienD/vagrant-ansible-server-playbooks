@@ -8,7 +8,9 @@
   sudo: yes
 
   vars_files:
+    # Contains variables an settings required for installing the environement
     - vars/settings.yml
+    # Contains configuration to deploy on the machine such as Apache vhost, mysql databases...
     - vars/configuration.yml
 
   tasks:
@@ -32,6 +34,21 @@
 
     - name: Common | Set the locale
       command: /usr/sbin/update-locale LANG={{ locale }} --reset
+
+
+    ##
+    # Installs NTP.
+    #
+    - name: Common | Install NTP
+      apt: pkg={{ item }} state=present
+      with_items:
+        - ntp
+        - ntpdate
+      tags: common
+
+    - name: write ntp.conf
+      copy: src=templates/ntp.conf dest=/etc/ntp.conf owner=root group=root mode=0644
+      tags: common
 
     ##
     # Apt package installation of common software.
@@ -94,25 +111,22 @@
         - expires
         - filter
 
-    - name: Apache | Virtualhost add | Create document root at $docroot
-      file:
-        path= {{ item.docroot }}
-        state=directory
-        force=no
-      with_items: vhosts
-      when: vhosts
+    - name: Apache | Create Apache vhosts document root
+      file: path={{apache_root }}/{{ item.docroot }} state=directory force=no
+      with_items: apache_vhosts
+      when: apache_vhosts
       tags: vhost
 
-    - name: Apache | Create apache vhost
+    - name: Apache | Create Apache vhosts
       template: src=templates/apache2-virtualhost.j2 dest=/etc/apache2/sites-available/{{ item.vhost }}.conf owner=root mode=0744
-      with_items: vhosts
-      when: vhosts
+      with_items: apache_vhosts
+      when: apache_vhosts
       tags: vhost
 
-    - name: Apache | Enable vhosts
+    - name: Apache | Enable Apache vhosts
       command: /usr/sbin/a2ensite {{ item.vhost }}.conf
-      with_items: vhosts
-      when: vhosts
+      with_items: apache_vhosts
+      when: apache_vhosts
       tags: vhost
 
 
@@ -192,7 +206,7 @@
     # Drush.
     #
     - name: Drush | Clone Drush from GitHub.
-      command: /usr/bin/git clone https://github.com/drush-ops/drush.git  /usr/local/share/drush
+      command: /usr/bin/git clone https://github.com/drush-ops/drush.git /usr/local/share/drush
       tags: drush
 
     - name: Drush | Install Drush dependencies with Composer.
@@ -210,6 +224,10 @@
     ##
     # Restart services
     #
+    - name: Restart NTP
+      action: service name=ntp state=restarted
+      tags: common
+
     - name: Restart Apache
       action: service name=apache2 state=restarted
       tags: common

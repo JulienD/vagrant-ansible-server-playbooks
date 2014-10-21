@@ -8,7 +8,7 @@
 
   DocumentRoot {{ apache_root}}/{{ item.docroot }}
   <Directory {{ apache_root}}/{{ item.docroot }}>
-    Options -Indexes FollowSymLinks MultiViews
+    Options Indexes FollowSymLinks MultiViews
     AllowOverride All
     Order allow,deny
     allow from all
