@@ -161,9 +161,7 @@
     #
     - name: Php | Install composer
       tags: common
-      shell:
-        curl -sS https://getcomposer.org/installer | /usr/bin/php && /bin/mv -f /home/vagrant/composer.phar /usr/local/bin/composer
-        creates=/usr/local/bin/composer
+      shell: curl -sS https://getcomposer.org/installer | /usr/bin/php && /bin/mv -f /home/vagrant/composer.phar /usr/local/bin/composer creates=/usr/local/bin/composer
 
 
     ##
@@ -201,12 +199,17 @@
       mysql_db: db=test state=absent login_user=root login_password={{ mysql_root_password }}
       tags: common
 
+    - name: MySQL | Add MySQL databases
+      mysql_db: name={{item.name}} state=present
+      with_items: mysql_dbs
+      when: mysql_dbs
+      tags: mysql_db
 
     ##
     # Drush.
     #
     - name: Drush | Clone Drush from GitHub.
-      command: /usr/bin/git clone https://github.com/drush-ops/drush.git /usr/local/share/drush
+      git: repo=https://github.com/drush-ops/drush.git dest=/usr/local/share/drush
       tags: drush
 
     - name: Drush | Install Drush dependencies with Composer.
