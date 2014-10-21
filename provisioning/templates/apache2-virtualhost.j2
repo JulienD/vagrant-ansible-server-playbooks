@@ -3,8 +3,8 @@
 ##
 <VirtualHost *:80>
   ServerName {{ item.vhost }}
-	ServerAdmin {{ apache_server_admin }}
-	ServerAlias {{ apache_server_alias }}
+  ServerAdmin {{ apache_server_admin }}
+  ServerAlias {{ apache_server_alias }}
 
   DocumentRoot {{ apache_root}}/{{ item.docroot }}
   <Directory {{ apache_root}}/{{ item.docroot }}>
