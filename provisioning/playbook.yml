@@ -32,6 +32,21 @@
     - name: Common | Set the locale
     command: /usr/sbin/update-locale LANG={{ locale }} --reset
 
+
+    ##
+    # Installs NTP.
+    #
+    - name: Common | Install NTP
+      apt: pkg={{ item }} state=present
+      with_items:
+        - ntp
+        - ntpdate
+      tags: common
+
+    - name: write ntp.conf
+      copy: src=templates/ntp.conf dest=/etc/ntp.conf owner=root group=root mode=0644
+      tags: common
+
     ##
     # Apt package installation of common software.
     #
@@ -66,8 +81,6 @@
     - name: Git | Install git base packages
       apt: pkg=git-core state=installed force=yes
       tags: common
-
-
 
 
     ##
