@@ -16,6 +16,11 @@ It will install the following on an Ubuntu 14.04 linux VM:
 - MySQL 5.5.x
 - Composer
 - Git
+- Xdebug
+
+In addition to these softwares, you can install:
+
+- Drush
 
 ## Other environnements
 
@@ -69,8 +74,6 @@ For more details have a look at the file `provisioning/playbook.yml` and look fo
 
 - common
 - drush
-- apache_vhost
-- mysql_db
 
 ## Why not respecting Ansible best practices
 
@@ -81,5 +84,5 @@ I decided to rewrite all my development machines recipes in a flattern file way 
 ## Todo
 
 Here is a list of things I have to do to finish this env.
-- Add and configure XDebug (by default)
 - SolR (in option)
+- Avoid Drush redownload via git
