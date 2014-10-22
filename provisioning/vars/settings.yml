@@ -49,7 +49,7 @@ apache_user: "www-data"
 apache_group: "www-data"
 
 # Default apache base directory (without trailing '/')
-apache_root: "/var/www"
+apache_root: "/home/vagrant/data"
 
 # Apache ports
 apache_port_http: 80

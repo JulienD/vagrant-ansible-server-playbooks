@@ -5,13 +5,12 @@
 	ServerName {{ ansible_fqdn }}
 	ServerAdmin {{ apache_server_admin }}
 	ServerAlias {{ apache_server_alias }}
-
+	
 	DocumentRoot {{ apache_root}}/default
 	<Directory {{ apache_root }}/default>
 		Options Indexes FollowSymLinks MultiViews
 		AllowOverride All
-		Order allow,deny
-		allow from all
+		Require all granted
 	</Directory>
 
 	CustomLog ${APACHE_LOG_DIR}/access.log combined

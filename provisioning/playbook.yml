@@ -46,7 +46,7 @@
         - ntpdate
       tags: common
 
-    - name: write ntp.conf
+    - name: Common | Install ntp.conf
       copy: src=templates/ntp.conf dest=/etc/ntp.conf owner=root group=root mode=0644
       tags: common
 
@@ -93,10 +93,6 @@
       action: apt pkg=apache2 state=latest force=yes
       tags: common
 
-    - name: Apache | Enable some required modules
-      action: command a2enmod rewrite vhost_alias
-      tags: common
-
     - name: Apache | Configuration file for our site
       action: template src=templates/apache2-default-virtualhost.j2 dest=/etc/apache2/sites-available/default
       tags: common
@@ -111,23 +107,27 @@
         - expires
         - filter
 
+    - name: Apache | Remove default Apache vhosts
+      file: path=/etc/apache2/sites-enabled/000-default.conf state=absent
+      tags: common
+
     - name: Apache | Create Apache vhosts document root
       file: path={{apache_root }}/{{ item.docroot }} state=directory force=no
       with_items: apache_vhost
       when: apache_vhost
-      tags: apache_vhost
+      tags: common
 
     - name: Apache | Create Apache vhosts
       template: src=templates/apache2-virtualhost.j2 dest=/etc/apache2/sites-available/{{ item.vhost }}.conf owner=root mode=0744
       with_items: apache_vhost
       when: apache_vhost
-      tags: apache_vhost
+      tags: common
 
     - name: Apache | Enable Apache vhosts
       command: /usr/sbin/a2ensite {{ item.vhost }}.conf
       with_items: apache_vhost
       when: apache_vhost
-      tags: apache_vhost
+      tags: common
 
 
     ##
@@ -151,8 +151,12 @@
         - libapache2-mod-php5
         - libpcre3-dev
 
-    - name: PHP | Configuration file, php.ini
+    - name: PHP | PHP configuration
       action: template src=templates/php5-apache2-php-ini.j2 dest=/etc/php5/apache2/php.ini
+      tags: common
+
+    - name: PHP | XDebug configuration
+      action: template src=templates/php-xdebug.j2 dest=/etc/php5/mods-available/xdebug.ini
       tags: common
 
 
@@ -203,7 +207,7 @@
       mysql_db: name={{item.name}} state=present
       with_items: mysql_db
       when: mysql_db
-      tags: mysql_db
+      tags: common
 
     ##
     # Drush.

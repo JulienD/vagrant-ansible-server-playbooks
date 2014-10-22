@@ -31,7 +31,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Anible provisionning.
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "provisioning/playbook.yml"
-    ansible.tags="common,drush,vhost,mysql_db"
+    ansible.tags="common,drush"
     # If something goes wrong, you'll want Ansible to be more verbose.
     # ansible.verbose = true
   end
