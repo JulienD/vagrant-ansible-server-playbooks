@@ -1,5 +1,5 @@
 ##
-# Ansible playbook for setting up a LAMP development server on Ubuntu 12.04.
+# Ansible playbook for setting up a Go development server on Ubuntu 12.04.
 #
 ---
 - hosts: all
@@ -8,18 +8,21 @@
   sudo: yes
 
   vars_files:
+    # Contains variables an settings required for installing the environement
     - vars/settings.yml
+    # Contains configuration to deploy on the machine such as Apache vhost, mysql databases...
+    - vars/configuration.yml
 
   tasks:
 
     ##
     # Update the box and install common softwares.
     #
-    - name: Common | Install 'python-apt' module
+    - name: Common | Install 'python-apt' module
       command: apt-get install python-apt -y
       tags: common
 
-    - name: Common | Upgrade all packages
+    - name: Common | Upgrade all packages
       apt: upgrade=yes update_cache=yes
       tags: common
 
@@ -30,7 +33,7 @@
       command: /usr/sbin/locale-gen {{ locale }}
 
     - name: Common | Set the locale
-    command: /usr/sbin/update-locale LANG={{ locale }} --reset
+      command: /usr/sbin/update-locale LANG={{ locale }} --reset
 
 
     ##
@@ -43,14 +46,14 @@
         - ntpdate
       tags: common
 
-    - name: write ntp.conf
+    - name: Common | Install ntp.conf
       copy: src=templates/ntp.conf dest=/etc/ntp.conf owner=root group=root mode=0644
       tags: common
 
     ##
     # Apt package installation of common software.
     #
-    - name: Common | Install misc utils.
+    - name: Common | Install misc utils.
       action: apt pkg={{ item }} state=installed force=yes
       tags: common
       with_items:
@@ -66,7 +69,7 @@
     ##
     # Python setup
     #
-    - name: Common | Install misc utils.
+    - name: Common | Install misc utils.
       action: apt pkg={{ item }} state=installed force=yes
       tags: common
       with_items:
@@ -78,7 +81,7 @@
     ##
     # GIT Setup.
     #
-    - name: Git | Install git base packages
+    - name: Git | Install git base packages
       apt: pkg=git-core state=installed force=yes
       tags: common
 
@@ -118,10 +121,20 @@
       mysql_db: db=test state=absent login_user=root login_password={{ mysql_root_password }}
       tags: common
 
+    - name: MySQL | Add MySQL databases
+      mysql_db: name={{item.name}} state=present
+      with_items: mysql_db
+      when: mysql_db
+      tags: common
+
 
     ##
     # Restart services
     #
+    - name: Restart NTP
+      action: service name=ntp state=restarted
+      tags: common
+
     - name: Restart MySQL
       action: service name=mysql state=restarted
       tags: common

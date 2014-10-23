@@ -5,7 +5,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  config.vm.hostname = "Lamp-dev-env"
+  config.vm.hostname = "Go-dev-env"
 
   config.vm.box = "ubuntu/trusty64"
 
@@ -17,7 +17,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Shared folders.
   config.vm.synced_folder "data", "/home/vagrant/data", create: true, id: "vagrant-root",
     owner: "vagrant",
-    group: "www-data",
+    group: "vagrant",
     mount_options: ["dmode=775,fmode=764"]
 
   # Provider-specific VM configuration.
@@ -31,7 +31,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Anible provisionning.
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "provisioning/playbook.yml"
-    ansible.tags="common,drush"
+    ansible.tags="common"
     # If something goes wrong, you'll want Ansible to be more verbose.
     # ansible.verbose = true
   end
