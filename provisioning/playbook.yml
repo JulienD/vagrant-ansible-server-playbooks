@@ -129,6 +129,22 @@
 
 
     ##
+    # Go Lang Setup.
+    #
+    - name: Go | Install Go base packages
+      apt: pkg=golang state=installed force=yes
+      tags: common
+
+    - name: Go | Create directory for GOPATH
+      file: path={{ go_path }} state=directory
+      tags: common
+
+    - name: Go | Set up environment variable for GOPATH
+      lineinfile: dest=~/.bashrc regexp=^GOPATH= line="export GOPATH={{ go_path }}" state=present
+      tags: common
+
+
+    ##
     # Restart services
     #
     - name: Restart NTP
