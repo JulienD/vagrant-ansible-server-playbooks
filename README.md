@@ -26,8 +26,10 @@ In addition to these softwares, you can install:
 
 The repository hosts several development environnements you can access in the other branches. Each of them are designed to answer to specific needs.
 
-- [ubuntu-14.04-lamp-dev](https://github.com/JulienD/vagrant-ansible-server-playbooks/tree/ubuntu-14.04-lamp-dev)
-- [ubuntu-14.04-nodejs-dev](https://github.com/JulienD/vagrant-ansible-server-playbooks/tree/ubuntu-14.04-nodejs-dev)
+- [ubuntu-14.04-Lamp-dev](https://github.com/JulienD/vagrant-ansible-server-playbooks/tree/ubuntu-14.04-lamp-dev)
+- [ubuntu-14.04-Nodejs-dev](https://github.com/JulienD/vagrant-ansible-server-playbooks/tree/ubuntu-14.04-nodejs-dev)
+- [ubuntu-14.04-Golang-dev](https://github.com/JulienD/vagrant-ansible-server-playbooks/tree/ubuntu-14.04-go-dev)
+
 
 ## Requirements
 
