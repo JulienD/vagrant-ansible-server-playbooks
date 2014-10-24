@@ -6,9 +6,9 @@ This project aims to make spinning up a simple development environment and avoid
 
 All the provisioning is done with `Ansible`.
 
-## LAMP environnement
+## Node.js environnement
 
-This project is designed to install all needed for web developpement on a LAMP architecture.
+This project is designed to install all needed for Nodejs developpement.
 It will install the following on an Ubuntu 14.04 linux VM:
 
 - Node.js
@@ -19,8 +19,9 @@ It will install the following on an Ubuntu 14.04 linux VM:
 
 The repository hosts several development environnements you can access in the other branches. Each of them are designed to answer to specific needs.
 
-- [ubuntu-14.04-lamp-dev](https://github.com/JulienD/vagrant-ansible-server-playbooks/tree/ubuntu-14.04-lamp-dev)
-- [ubuntu-14.04-nodejs-dev](https://github.com/JulienD/vagrant-ansible-server-playbooks/tree/ubuntu-14.04-nodejs-dev)
+- [ubuntu-14.04-Lamp-dev](https://github.com/JulienD/vagrant-ansible-server-playbooks/tree/ubuntu-14.04-lamp-dev)
+- [ubuntu-14.04-Nodejs-dev](https://github.com/JulienD/vagrant-ansible-server-playbooks/tree/ubuntu-14.04-nodejs-dev)
+- [ubuntu-14.04-Golang-dev](https://github.com/JulienD/vagrant-ansible-server-playbooks/tree/ubuntu-14.04-go-dev)
 
 ## Requirements
 
@@ -34,7 +35,7 @@ Preferably in their latest versions from the web sites.
 
 Clone this repository to a local directory and change the name of it:
 
-    git clone https://github.com/JulienD/vagrant-ansible-server-playbooks.git nodejs-dev-env
+    git clone -b ubuntu-14.04-nodejs-dev https://github.com/JulienD/vagrant-ansible-server-playbooks.git nodejs-dev-env
 
 Go into the directory and run:
 
