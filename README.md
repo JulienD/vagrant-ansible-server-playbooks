@@ -35,7 +35,7 @@ Preferably in their latest versions from the web sites.
 
 Clone this repository to a local directory and change the name of it:
 
-    git clone https://github.com/JulienD/vagrant-ansible-server-playbooks.git go-dev-env
+    git clone -b ubuntu-14.04-go-dev https://github.com/JulienD/vagrant-ansible-server-playbooks.git go-dev-env
 
 Go into the directory and run:
 
