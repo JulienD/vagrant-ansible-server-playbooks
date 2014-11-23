@@ -20,7 +20,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Provider-specific VM configuration.
   config.vm.provider :virtualbox do |v|
-      v.name = "Default"
+      v.name = "Node-dev-env"
       v.customize ["modifyvm", :id, "--memory", 512]
       # vb.customize ["modifyvm", :id, "--cpus", "2"]
       # vb.gui = true
