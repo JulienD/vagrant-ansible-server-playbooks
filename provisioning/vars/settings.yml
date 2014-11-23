@@ -7,18 +7,3 @@
 # Common
 common_upgrade: false
 local: 'en_GB.UTF-8'
-
-# Hostname is important as we need to delete an anonymous MySQL
-# user that is created with this name, make sure you match this
-# up with the output of the command 'hostname' on the server.
-server_hostname: 'example.com'
-
-####
-# mysql
-mysql_root_password: 'password'
-
-# my.cnf
-mysql_max_allowed_packet: '128M'
-mysql_character_set_server: 'utf8'
-mysql_collation_server: 'utf8_general_ci'
-innodb_file_per_table: 'innodb_file_per_table'

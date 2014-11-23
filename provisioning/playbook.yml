@@ -61,60 +61,13 @@
         - software-properties-common
         - unzip
         - vim
-
-    ##
-    # Python setup
-    #
-    - name: Common | Install misc utils.
-      action: apt pkg={{ item }} state=installed force=yes
-      tags: common
-      with_items:
-        - python-software-properties
-        - python-pycurl
-        - python-mysqldb
-
+        
 
     ##
     # GIT Setup.
     #
     - name: Git | Install git base packages
       apt: pkg=git-core state=installed force=yes
-      tags: common
-
-
-    ##
-    # MySQL database setup.
-    #
-    - name: General | Install required packages.
-      action: apt pkg={{ item }} state=installed force=yes
-      tags: common
-      with_items:
-        - mysql-server
-        - mysql-client
-
-    - name: MySQL | Configuration file, my.cnf
-      action: template src=templates/mysql-my-cnf.j2 dest=/etc/mysql/my.cnf
-      tags: common
-
-    # Secure installation
-    - name: MySQL | Set the root password.
-      action: mysql_user user=root password={{ mysql_root_password }} host=localhost
-      tags: common
-
-    - name: MySQL | Config for easy access as root user
-      action: template src=templates/mysql-root-my-cnf.j2 dest=/root/.my.cnf
-      tags: common
-
-    - name: MySQL | Remove empty password users
-      mysql_user: name='' password='' host=localhost priv=*.*:USAGE state=absent login_user=root login_password={{ mysql_root_password }}
-      tags: common
-
-    - name: MySQL | Remove empty password users
-      mysql_user: name='' password='' host={{ ansible_fqdn }} priv=*.*:USAGE state=absent login_user=root login_password={{ mysql_root_password }}
-      tags: common
-
-    - name: MySQL | Remove the MySQL test database
-      mysql_db: db=test state=absent login_user=root login_password={{ mysql_root_password }}
       tags: common
 
 
@@ -137,7 +90,9 @@
       action: apt pkg=nodejs state=installed
       tags: common
 
-
-    - name: Restart MySQL
-      action: service name=mysql state=restarted
+    ##
+    # Restart services
+    #
+    - name: Restart NTP
+      action: service name=ntp state=restarted
       tags: common
