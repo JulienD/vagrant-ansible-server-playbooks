@@ -34,6 +34,7 @@ apc_num_files_hint: '0'
 mysql_root_password: 'password'
 
 # my.cnf
+mysql_datadir: '/var/lib/mysql'
 mysql_max_allowed_packet: '128M'
 mysql_character_set_server: 'utf8'
 mysql_collation_server: 'utf8_general_ci'
