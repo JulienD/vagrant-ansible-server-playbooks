@@ -147,6 +147,7 @@
         - php5-xdebug
         - php5-xmlrpc
         - php5-gd
+        - php5-intl
         - libapache2-mod-php5
         - libpcre3-dev
 
