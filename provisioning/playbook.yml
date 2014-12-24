@@ -151,8 +151,12 @@
         - libapache2-mod-php5
         - libpcre3-dev
 
-    - name: PHP | PHP configuration
+    - name: PHP | PHP Apache2 configuration
       action: template src=templates/php5-apache2-php-ini.j2 dest=/etc/php5/apache2/php.ini
+      tags: common
+
+    - name: PHP | PHP CLI configuration
+      action: template src=templates/php5-cli-php-ini.j2 dest=/etc/php5/cli/php.ini
       tags: common
 
     - name: PHP | XDebug configuration
