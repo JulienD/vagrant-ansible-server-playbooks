@@ -15,16 +15,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network :private_network, ip: "33.33.33.20"
 
   # Shared folders.
-  config.vm.synced_folder "data", "/home/vagrant/data", create: true, id: "vagrant-root",
+  config.vm.synced_folder "data", "/home/vagrant/data", create: true, id: "vagrant-data",
     owner: "vagrant",
     group: "vagrant",
     mount_options: ["dmode=775,fmode=764"]
 
   # Provider-specific VM configuration.
   config.vm.provider :virtualbox do |v|
-      v.name = "Default"
-      v.customize ["modifyvm", :id, "--memory", 512]
-      # vb.customize ["modifyvm", :id, "--cpus", "2"]
+      v.memory = 1024
+      # v.cpus = 2
       # vb.gui = true
   end
 
