@@ -1,4 +1,4 @@
+# Configuration variables are used to configure the environment.
+
+---
 ####
-# mysql
-mysql_db:
-- { name: 'example_a' }
