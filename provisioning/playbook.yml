@@ -85,47 +85,9 @@
       apt: pkg=git-core state=installed force=yes
       tags: common
 
-
     ##
-    # MySQL database setup.
+    # Mercury setup.
     #
-    - name: General | Install required packages.
-      action: apt pkg={{ item }} state=installed force=yes
-      tags: common
-      with_items:
-        - mysql-server
-        - mysql-client
-
-    - name: MySQL | Configuration file, my.cnf
-      action: template src=templates/mysql-my-cnf.j2 dest=/etc/mysql/my.cnf
-      tags: common
-
-    # Secure installation
-    - name: MySQL | Set the root password.
-      action: mysql_user user=root password={{ mysql_root_password }} host=localhost
-      tags: common
-
-    - name: MySQL | Config for easy access as root user
-      action: template src=templates/mysql-root-my-cnf.j2 dest=/root/.my.cnf
-      tags: common
-
-    - name: MySQL | Remove empty password users
-      mysql_user: name='' password='' host=localhost priv=*.*:USAGE state=absent login_user=root login_password={{ mysql_root_password }}
-      tags: common
-
-    - name: MySQL | Remove empty password users
-      mysql_user: name='' password='' host={{ ansible_fqdn }} priv=*.*:USAGE state=absent login_user=root login_password={{ mysql_root_password }}
-      tags: common
-
-    - name: MySQL | Remove the MySQL test database
-      mysql_db: db=test state=absent login_user=root login_password={{ mysql_root_password }}
-      tags: common
-
-    - name: MySQL | Add MySQL databases
-      mysql_db: name={{item.name}} state=present
-      with_items: mysql_db
-      when: mysql_db
-      tags: common
 
 
     ##
@@ -149,8 +111,4 @@
     #
     - name: Restart NTP
       action: service name=ntp state=restarted
-      tags: common
-
-    - name: Restart MySQL
-      action: service name=mysql state=restarted
       tags: common
