@@ -12,8 +12,7 @@ This project is designed to install all needed for Go developpement.
 It will install the following on an Ubuntu 14.04 linux VM:
 
 - Go 1.2.x
-- MySQL 5.5.x
-- Git
+- Git, Mercurial and Bazaar
 
 ## Other environnements
 

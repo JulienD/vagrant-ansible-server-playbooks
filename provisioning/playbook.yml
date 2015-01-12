@@ -18,8 +18,8 @@
     ##
     # Update the box and install common softwares.
     #
-    - name: Common | Install 'python-apt' module
-      command: apt-get install python-apt -y
+    - name: Common | Install 'python-apt' module      
+      apt: pkg=python-apt state=present
       tags: common
 
     - name: Common | Upgrade all packages
@@ -54,7 +54,7 @@
     # Apt package installation of common software.
     #
     - name: Common | Install misc utils.
-      action: apt pkg={{ item }} state=installed force=yes
+      apt: pkg={{ item }} state=installed force=yes
       tags: common
       with_items:
         - htop
@@ -70,7 +70,7 @@
     # Python setup
     #
     - name: Common | Install misc utils.
-      action: apt pkg={{ item }} state=installed force=yes
+      apt: pkg={{ item }} state=installed force=yes
       tags: common
       with_items:
         - python-software-properties
@@ -79,15 +79,15 @@
 
 
     ##
-    # GIT Setup.
+    # GIT, Mercurial and Bazaar setup.
     #
     - name: Git | Install git base packages
-      apt: pkg=git-core state=installed force=yes
+      apt: pkg={{ item }} state=installed force=yes
       tags: common
-
-    ##
-    # Mercury setup.
-    #
+      with_items:
+        - git-core
+        - mercurial
+        - bzr
 
 
     ##
