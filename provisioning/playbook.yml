@@ -3,7 +3,6 @@
 #
 ---
 - hosts: all
-  #user: root
   user: vagrant
   sudo: yes
 
@@ -19,7 +18,7 @@
     # Update the box and install common softwares.
     #
     - name: Common | Install 'python-apt' module
-      command: apt-get install python-apt -y
+      apt: pkg=python-apt state=present
       tags: common
 
     - name: Common | Upgrade all packages
@@ -51,10 +50,10 @@
       tags: common
 
     ##
-    # Apt package installation of common software.
+    # Installation of common software.
     #
     - name: Common | Install misc utils.
-      action: apt pkg={{ item }} state=installed force=yes
+      apt: pkg={{ item }} state=installed force=yes
       tags: common
       with_items:
         - htop
@@ -70,7 +69,7 @@
     # Python setup
     #
     - name: Common | Install misc utils.
-      action: apt pkg={{ item }} state=installed force=yes
+      apt: pkg={{ item }} state=installed force=yes
       tags: common
       with_items:
         - python-software-properties
@@ -90,7 +89,7 @@
     # Apache2 setup.
     #
     - name: Apache | Install required packages.
-      action: apt pkg=apache2 state=latest force=yes
+      apt: pkg=apache2 state=latest force=yes
       tags: common
 
     - name: Apache | Configuration file for our site
@@ -134,7 +133,7 @@
     # PHP Setup.
     #
     - name: PHP | Install required packages.
-      action: apt pkg={{ item }} state=installed force=yes
+      apt: pkg={{ item }} state=installed force=yes
       tags: common
       with_items:
         - php5
@@ -172,7 +171,7 @@
     # MySQL database setup.
     #
     - name: General | Install required packages.
-      action: apt pkg={{ item }} state=installed force=yes
+      apt: pkg={{ item }} state=installed force=yes
       tags: common
       with_items:
         - mysql-server
