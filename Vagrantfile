@@ -12,20 +12,27 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.forward_agent = true
 
   # IP network configuration.
-  config.vm.network :private_network, ip: "33.33.33.20"
+  config.vm.network :private_network, ip: "33.33.33.22"
+
 
   # Shared folders.
-  config.vm.synced_folder "data", "/home/vagrant/data", create: true, id: "vagrant-root",
-    owner: "vagrant",
-    group: "www-data",
-    mount_options: ["dmode=775,fmode=764"]
+  config.vm.synced_folder "data", "/home/vagrant/data", create: true, id: "data",
+    nfs: true    
+  
+  #config.vm.synced_folder "data", "/home/vagrant/data", create: true, id: "data",
+  #  owner: "vagrant",
+  #  group: "www-data",
+  #  mount_options: ["dmode=775,fmode=764"]
+
+  config.vm.synced_folder "drush", "/usr/local/share/drush", create: true, id: "drush",
+    nfs: true   
 
   # Provider-specific VM configuration.
   config.vm.provider :virtualbox do |v|
-      v.name = "Lamp"
-      v.customize ["modifyvm", :id, "--memory", 512]
-      # vb.customize ["modifyvm", :id, "--cpus", "2"]
-      # vb.gui = true
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+      v.memory = 1024
+      v.cpus = 2  
   end
 
   # Anible provisionning.
