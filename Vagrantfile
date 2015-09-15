@@ -19,14 +19,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder "data", "/home/vagrant/data", create: true, id: "data",
     nfs: true    
   
-  #config.vm.synced_folder "data", "/home/vagrant/data", create: true, id: "data",
-  #  owner: "vagrant",
-  #  group: "www-data",
-  #  mount_options: ["dmode=775,fmode=764"]
-
-  config.vm.synced_folder "drush", "/usr/local/share/drush", create: true, id: "drush",
-    nfs: true   
-
   # Provider-specific VM configuration.
   config.vm.provider :virtualbox do |v|
       v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
